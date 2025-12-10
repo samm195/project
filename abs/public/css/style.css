@@ -1,0 +1,294 @@
+/* GLOBAL */
+body {
+    
+
+    font-family: 'Poppins', sans-serif;
+    padding: 0 0;
+}
+
+/* PAGE TITLE */
+.container h2 {
+    color: #6B6A9E;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* SECTION TITLES */
+h4 {
+    color: #6B6A9E;
+    margin-top: 40px;
+    margin-bottom: 10px;
+}
+
+/* BUTTONS (Pastel Replacements for Bootstrap) */
+.btn-success {
+    background: #8EE5C2 !important;
+    border: none !important;
+    color: white !important;
+    padding: 8px 15px;
+    border-radius: 10px;
+}
+
+.btn-danger {
+    background: #FFB8C6 !important;
+    border: none !important;
+    color: white !important;
+    padding: 8px 15px;
+    border-radius: 10px;
+}
+
+.btn-primary {
+    background: #C4B5FD !important;
+    border: none !important;
+    color: white !important;
+    padding: 8px 15px;
+    border-radius: 10px;
+}
+
+.btn-secondary {
+    background: #E0D7FF !important;
+    color: #6B6A9E !important;
+    border: none !important;
+    padding: 8px 15px;
+    border-radius: 10px;
+}
+
+
+.btn-info {
+    background: #B9A8FF !important;
+    border: none !important;
+    color: white !important;
+    padding: 8px 15px;
+    border-radius: 10px;
+}
+
+/* TABLES */
+.table {
+    background: white !important;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.table thead {
+    background: #CFE8FF !important;
+}
+
+.table th {
+    color: #4A4A4A;
+    font-weight: 600;
+}
+
+.table tbody tr td {
+    padding: 12px !important;
+}
+
+/* SPACING FIXES */
+.mt-3 { margin-top: 20px !important; }
+.mt-5 { margin-top: 40px !important; }
+
+a.btn { margin-right: 5px; }
+
+/* TOP HEADER BAR */
+.top-header {
+    width: 100%;
+    background: #FFFFFF;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    margin-bottom: 30px;
+}
+
+/* LEFT SIDE OF HEADER */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.site-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: #E7E4F1;
+    object-fit: cover;
+}
+
+.site-name {
+    font-size: 22px;
+    font-weight: 600;
+    color: #6B6A9E;
+}
+
+/* RIGHT SIDE OF HEADER */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-link {
+    font-size: 16px;
+    color: #6B6A9E;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.header-link:hover {
+    text-decoration: underline;
+}
+
+.header-logout {
+    padding: 8px 15px !important;
+    border-radius: 10px !important;
+}
+
+/* ------------------------------------------------------ */
+/*                     PROFILE PAGE                       */
+/* ------------------------------------------------------ */
+
+.profile-title {
+    color: #6B6A9E;
+    font-size: 28px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+/* Centered card */
+.profile-card {
+    background: white;
+    padding: 40px 20px;
+    border-radius: 18px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    max-width: 500px;
+    margin: 0 auto;            /* center horizontally */
+    text-align: center;        /* center content */
+}
+
+/* Ensures full centering of all content */
+.profile-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;       /* center left/right */
+    justify-content: center;
+}
+
+/* Profile Photo */
+.profile-photo-large {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #E7E4F1;
+    margin-bottom: 20px;
+}
+
+/* User info section */
+.profile-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-info p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+/* Upload section */
+.upload-form {
+    width: 100%;
+    text-align: center;
+}
+
+.upload-form input[type="file"] {
+    margin: 10px auto;
+    display: block;
+    width: 80%;
+}
+
+/* ------------------------------------------------------ */
+/*                       LOGIN PAGE                       */
+/* ------------------------------------------------------ */
+
+/* Fullscreen background */
+.login-bg {
+    height: 100vh;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
+    /*background: url("../images/login-bg.jpg") no-repeat center center fixed;*/
+    background-color: #8483bd /*rgb(169, 139, 233)*/;
+    background-size: cover;
+
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Glass effect login card */
+.login-glass {
+    width: 380px;
+    padding: 30px 40px;
+    border-radius: 18px;
+
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+    color: #ffffff;
+    text-align: center;
+}
+
+/* Input fields inside login card */
+.login-input {
+    background: rgba(255, 255, 255, 0.25);
+    border: none;
+    border-radius: 10px;
+    padding-bottom: 13px ;
+    padding-top: 13px ;
+    padding-right: 0px;
+    padding-left: 10px;
+    color: white;
+    width: 100%;
+}
+
+.login-input::placeholder {
+    color: #eaeaea;
+    padding:10px;
+}
+
+/* Login button */
+.btn-login {
+    background: white;
+    color: #6B6A9E;
+    font-weight: 600;
+    padding: 13px;
+    border-radius: 10px;
+    border: none;
+    width: 100%;
+    transition: 0.2s;
+}
+
+.btn-login:hover {
+    background: #f3f3f3;
+}
+
+/* Error message styling */
+.login-error {
+    background: rgba(255, 120, 120, 0.85);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+
+
