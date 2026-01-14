@@ -12,15 +12,34 @@ class ProfController extends Controller {
     }
 
     // Prof dashboard: list classes
-    public function index() {
-        $id_p = Session::get('id_u');
+   public function index() {
+    $id_p = Session::get('id_u');
 
-        /*var_dump($id_p);*/
+    $search = $_GET['search'] ?? null;
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $limit = 6;
+    $offset = ($page - 1) * $limit;
 
-        $classes = $this->profClassModel->getClassesByProf($id_p);
-        $data = ['classes' => $classes];
-        $this->view('prof/dashboard', $data);
+    if ($search) {
+        $classes = $this->profClassModel->getClassesByProfAndSearch($id_p, $search, $limit, $offset);
+        $total = $this->profClassModel->countClassesByProfAndSearch($id_p, $search);
+    } else {
+        $classes = $this->profClassModel->getClassesByProfPaginated($id_p, $limit, $offset);
+        $total = $this->profClassModel->countClassesByProf($id_p);
     }
+
+    $totalPages = ceil($total / $limit);
+
+    $data = [
+        'classes' => $classes,
+        'search' => $search,
+        'page' => $page,
+        'totalPages' => $totalPages
+    ];
+
+    $this->view('prof/dashboard', $data);
+}
+
 
     public function logout() {
         Session::destroy();
@@ -54,4 +73,6 @@ class ProfController extends Controller {
 
         $this->view('prof/faire_appel', $data);
     }
+   
+
 }

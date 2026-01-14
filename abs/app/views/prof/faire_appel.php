@@ -23,7 +23,7 @@
                 <tr>
                     <th>Student</th>
                     <th>Present</th>
-                    <th>Retard</th>
+                    <th>Late</th>
                     <th>Absent</th>
                 </tr>
             </thead>

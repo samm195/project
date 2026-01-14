@@ -22,7 +22,7 @@ h4 {
 
 /* BUTTONS (Pastel Replacements for Bootstrap) */
 .btn-success {
-    background: #8EE5C2 !important;
+    background: #67dcad !important;
     border: none !important;
     color: white !important;
     padding: 8px 15px;
@@ -30,7 +30,7 @@ h4 {
 }
 
 .btn-danger {
-    background: #FFB8C6 !important;
+    background: #f494a7 !important;
     border: none !important;
     color: white !important;
     padding: 8px 15px;
@@ -38,7 +38,7 @@ h4 {
 }
 
 .btn-primary {
-    background: #C4B5FD !important;
+    background:#484692 !important;
     border: none !important;
     color: white !important;
     padding: 8px 15px;
@@ -46,8 +46,8 @@ h4 {
 }
 
 .btn-secondary {
-    background: #E0D7FF !important;
-    color: #6B6A9E !important;
+    background: #224787 !important;
+    color: #8da9d0 !important;
     border: none !important;
     padding: 8px 15px;
     border-radius: 10px;
@@ -55,7 +55,7 @@ h4 {
 
 
 .btn-info {
-    background: #B9A8FF !important;
+    background: #484692 !important;
     border: none !important;
     color: white !important;
     padding: 8px 15px;
@@ -267,7 +267,7 @@ a.btn { margin-right: 5px; }
 /* Login button */
 .btn-login {
     background: white;
-    color: #6B6A9E;
+    color: #424091;
     font-weight: 600;
     padding: 13px;
     border-radius: 10px;

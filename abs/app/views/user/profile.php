@@ -19,12 +19,12 @@
     <div class="profile-card">
 
         <div class="profile-center">
-            <img src="/aaa/abs/public/uploads/<?php echo !empty($user['photo']) ? $user['photo'] : 'default.jpg'; ?>" 
+            <img src="../public/uploads/<?php echo !empty($user['photo']) ? $user['photo'] : 'default.jpg'; ?>" 
                 class="profile-photo-large" 
                 alt="Profile Photo">
 
             <div class="profile-info">
-                <p><strong> <?= $user['role']; ?> </strong></p>
+              
                 <p><strong>ID:</strong> <?= $user['id_u']; ?></p>
                 <p><strong>Name:</strong> <?= $user['prenom'] . ' ' . $user['nom']; ?></p>
                 <p><strong>Email:</strong> <?= $user['email']; ?></p>
@@ -55,7 +55,7 @@
             </div>
 
 
-            <form action="/aaa/abs/public/index.php?controller=User&action=uploadPhoto" 
+            <form action="../public/index.php?controller=User&action=uploadPhoto" 
                 method="POST" enctype="multipart/form-data" class="upload-form">
 
                 <input type="file" name="photo" class="form-control" required>

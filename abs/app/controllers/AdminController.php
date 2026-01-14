@@ -1,4 +1,7 @@
 <?php
+require_once '../app/models/Absence.php';
+
+
 class AdminController extends Controller {
     private $userModel;
     private $classModel;
@@ -18,11 +21,15 @@ class AdminController extends Controller {
     public function index() {
         $profs = $this->userModel->getByRole('prof');
         $classes = $this->classModel->getAll();
+
         $data = [
             'profs' => $profs,
             'classes' => $classes
         ];
         $this->view('admin/dashboard', $data);
+        $profs = $this->userModel->getAllProfsPaginated(5, 0);
+         $classes = $this->classModel->getAllPaginated(5, 0);
+
     }
 
     // ---------------- Professors CRUD ----------------
@@ -164,24 +171,44 @@ class AdminController extends Controller {
 
 
     public function showProfs() {
-        $id_c = $_GET['id_c'];
+ 
+
+        $id_c = $_GET['id_c'] ?? $_GET['id'] ?? null;
+        if (!$id_c) {
+            die("Missing class ID in URL.");
+        }
+
+        $search = $_GET['search'] ?? null;
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $limit = 5;
+        $offset = ($page - 1) * $limit;
 
         $classModel = $this->model('ClassModel');
 
-        // Get profs teaching this class
-        $profs = $classModel->getProfsByClass($id_c);
+        if ($search) {
+            $profs = $classModel->searchProfsInClass($id_c, $search, $limit, $offset);
+            $total = $classModel->countProfsInClassBySearch($id_c, $search);
+        } else {
+            $profs = $classModel->getProfsByClassPaginated($id_c, $limit, $offset);
+            $total = $classModel->countProfsInClass($id_c);
+        }
 
-        // Get profs NOT teaching this class (to add)
         $availableProfs = $classModel->getAvailableProfsForClass($id_c);
+        $totalPages = ceil($total / $limit);
 
         $data = [
             'profs' => $profs,
             'availableProfs' => $availableProfs,
-            'id_c' => $id_c
+            'id_c' => $id_c,
+            'search' => $search,
+            'page' => $page,
+            'totalPages' => $totalPages
         ];
 
         $this->view('admin/show_profs', $data);
     }
+
+
 
     public function editClass() {
         $id_c = $_GET['id'];
@@ -210,11 +237,43 @@ class AdminController extends Controller {
     // ---------------- Students ----------------
     public function showStudents() {
         $id_c = $_GET['id'];
-        $classModel = $this->classModel;
-        $students = $classModel->getStudents($id_c);
-        $data = ['students' => $students, 'id_c' => $id_c];
-        $this->view('admin/students', $data);
+        $search = $_GET['search'] ?? null;
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $limit = 5;
+        $offset = ($page - 1) * $limit;
+
+        // Models
+        $userModel  = new User();
+        $classModel = new ClassModel();
+
+        // 🔹 NEW: get class info
+        $class = $classModel->getById($id_c);
+
+        // Students
+        if ($search) {
+            $students = $userModel->searchStudentsInClass($id_c, $search, $limit, $offset);
+            $total = $userModel->countStudentsInClassBySearch($id_c, $search);
+        } else {
+            $students = $userModel->getStudentsPaginated($id_c, $limit, $offset);
+            $total = $userModel->countStudentsInClass($id_c);
+        }
+
+        $totalPages = ceil($total / $limit);
+
+        // 🔹 Pass class to view
+        $this->view('admin/students', [
+            'students' => $students,
+            'id_c' => $id_c,
+            'class' => $class,
+            'search' => $search,
+            'page' => $page,
+            'totalPages' => $totalPages
+        ]);
     }
+
+
+
+
 
     public function addStudent() {
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -280,23 +339,33 @@ class AdminController extends Controller {
 
 
 
-    // Show absences of a student
-    public function showAbsences() {
-        $id_e = $_GET['id'];
-        $absenceModel = $this->model('Absence');
-        $absences = $absenceModel->getByStudent($id_e);
-        $data = ['absences' => $absences, 'id_e' => $id_e];
-        $this->view('admin/absences', $data);
-    }
 
     // Delete a specific absence
-    public function deleteAbsence() {
+    /*public function deleteAbsence() {
         $id_a = $_GET['id'];
         $id_e = $_GET['id_e'];
         $absenceModel = $this->model('Absence');
         $absenceModel->delete($id_a);
         header('Location: index.php?controller=Admin&action=showAbsences&id='.$id_e);
+    }*/
+    public function deleteAbsence()
+    {
+        if (!isset($_GET['id_a'], $_GET['id_e'])) {
+            header('Location: index.php?controller=Admin&action=index');
+            exit;
+        }
+
+        $id_a = (int) $_GET['id_a'];
+        $id_e = (int) $_GET['id_e'];
+
+        $absenceModel = new Absence();
+        $absenceModel->delete($id_a);
+
+        // Redirect back to the student's absences
+        header("Location: index.php?controller=Admin&action=showAbsences&id_e=$id_e");
+        exit;
     }
+
 
 
     // Logout
@@ -304,4 +373,88 @@ class AdminController extends Controller {
         Session::destroy();
         header('Location: index.php?controller=Login&action=index');
     }
+
+    public function allProfs() {
+        $search = $_GET['search'] ?? null;
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $limit = 5;
+        $offset = ($page - 1) * $limit;
+
+        if ($search) {
+            $profs = $this->userModel->searchProfs($search, $limit, $offset);
+            $total = $this->userModel->countProfsBySearch($search);
+        } else {
+            $profs = $this->userModel->getAllProfsPaginated($limit, $offset);
+            $total = $this->userModel->countAllProfs();
+        }
+
+        $totalPages = ceil($total / $limit);
+
+        $this->view('admin/all_profs', [
+            'profs' => $profs,
+            'search' => $search,
+            'page' => $page,
+            'totalPages' => $totalPages
+        ]);
+    }
+
+    public function allClasses() {
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $limit = 5;
+        $offset = ($page - 1) * $limit;
+
+        $classes = $this->classModel->getAllPaginated($limit, $offset);
+        $total = $this->classModel->countAll();
+        $totalPages = ceil($total / $limit);
+
+        $this->view('admin/all_classes', [
+            'classes' => $classes,
+            'page' => $page,
+            'totalPages' => $totalPages
+        ]);
+    }
+
+    public function showAbsences()
+    {
+        $id_e = $_GET['id_e'];
+        $search = $_GET['search'] ?? '';
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $limit = 5;
+        $offset = ($page - 1) * $limit;
+
+        $absenceModel = new Absence();
+        $userModel    = new User();   // 🔹 NEW
+
+        // 🔹 NEW: get student info
+        $student = $userModel->getById($id_e);
+
+        if (!empty($search)) {
+            $total = $absenceModel->countByStudentAndSubject($id_e, $search);
+            $absences = $absenceModel->getByStudentAndSubjectPaginated($id_e, $search, $limit, $offset);
+        } else {
+            $total = $absenceModel->countByStudent($id_e);
+            $absences = $absenceModel->getByStudentPaginated($id_e, $limit, $offset);
+        }
+
+        $totalPages = ceil($total / $limit);
+
+        // Prevent invalid page numbers (only when not searching)
+        if (empty($search) && $page > $totalPages && $totalPages > 0) {
+            $page = 1;
+            $offset = 0;
+            $absences = $absenceModel->getByStudentPaginated($id_e, $limit, $offset);
+        }
+
+        require_once '../app/views/admin/absences.php';
+    }
+
+
+
+
 }
+
+
+
+
+
+

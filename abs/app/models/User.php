@@ -74,6 +74,133 @@ class User {
             ':id_c' => $id_c
         ]);
     }
+    public function getAllProfsPaginated($limit, $offset) {
+    $sql = "SELECT * FROM users WHERE role = 'prof' ORDER BY nom ASC LIMIT :limit OFFSET :offset";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+public function countAllProfs() {
+    $sql = "SELECT COUNT(*) FROM users WHERE role = 'prof'";
+    return (int)$this->conn->query($sql)->fetchColumn();
+}
+
+public function searchProfs($search, $limit, $offset) {
+    $sql = "SELECT * FROM users WHERE role = 'prof' AND (nom LIKE :search OR prenom LIKE :search OR email LIKE :search)
+            ORDER BY nom ASC LIMIT :limit OFFSET :offset";
+    $stmt = $this->conn->prepare($sql);
+    $like = '%' . $search . '%';
+    $stmt->bindParam(':search', $like);
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+public function countProfsBySearch($search) {
+    $sql = "SELECT COUNT(*) FROM users WHERE role = 'prof' AND (nom LIKE :search OR prenom LIKE :search OR email LIKE :search)";
+    $stmt = $this->conn->prepare($sql);
+    $like = '%' . $search . '%';
+    $stmt->bindParam(':search', $like);
+    $stmt->execute();
+    return (int)$stmt->fetchColumn();
+}
+public function getStudentsPaginated($id_c, $limit, $offset) {
+    $sql = "SELECT * FROM users WHERE role = 'etudiant'
+ AND id_c = :id_c LIMIT :limit OFFSET :offset";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindValue(':id_c', $id_c, PDO::PARAM_INT);
+    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+public function countStudentsInClass($id_c) {
+    $sql = "SELECT COUNT(*) FROM users 
+            WHERE role = 'etudiant'
+ AND id_c = :id_c";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':id_c', $id_c, PDO::PARAM_INT);
+    $stmt->execute();
+    return (int)$stmt->fetchColumn();
+}
+public function searchStudentsInClass($id_c, $search, $limit, $offset) {
+    $sql = "SELECT * FROM users 
+            WHERE role = 'etudiant' AND id_c = :id_c 
+            AND (nom LIKE :search OR prenom LIKE :search OR email LIKE :search)
+            ORDER BY nom ASC 
+            LIMIT :limit OFFSET :offset";
+    $stmt = $this->conn->prepare($sql);
+    $like = '%' . $search . '%';
+    $stmt->bindParam(':id_c', $id_c, PDO::PARAM_INT);
+    $stmt->bindParam(':search', $like, PDO::PARAM_STR);
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+public function countStudentsInClassBySearch($id_c, $search) {
+    $sql = "SELECT COUNT(*) FROM users 
+           WHERE role = 'etudiant' AND id_c = :id_c 
+            AND (nom LIKE :search OR prenom LIKE :search OR email LIKE :search)";
+    $stmt = $this->conn->prepare($sql);
+    $like = '%' . $search . '%';
+    $stmt->bindParam(':id_c', $id_c, PDO::PARAM_INT);
+    $stmt->bindParam(':search', $like, PDO::PARAM_STR);
+    $stmt->execute();
+    return (int)$stmt->fetchColumn();
+}
+public function getProfsInClassPaginated($id_c, $limit, $offset) {
+    $sql = "SELECT * FROM users 
+            WHERE role = 'prof' AND id_c = :id_c 
+            ORDER BY nom ASC 
+            LIMIT :limit OFFSET :offset";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindValue(':id_c', $id_c, PDO::PARAM_INT);
+    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+public function searchProfsInClass($id_c, $search, $limit, $offset) {
+    $sql = "SELECT * FROM users 
+            WHERE role = 'prof' AND id_c = :id_c 
+            AND (nom LIKE :search OR prenom LIKE :search OR email LIKE :search)
+            ORDER BY nom ASC 
+            LIMIT :limit OFFSET :offset";
+    $stmt = $this->conn->prepare($sql);
+    $like = '%' . $search . '%';
+    $stmt->bindParam(':id_c', $id_c, PDO::PARAM_INT);
+    $stmt->bindParam(':search', $like, PDO::PARAM_STR);
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+public function countProfsInClass($id_c) {
+    $sql = "SELECT COUNT(*) FROM users 
+            WHERE role = 'prof' AND id_c = :id_c";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':id_c', $id_c, PDO::PARAM_INT);
+    $stmt->execute();
+    return (int)$stmt->fetchColumn();
+}
+public function countProfsInClassBySearch($id_c, $search) {
+    $sql = "SELECT COUNT(*) FROM users 
+            WHERE role = 'prof' AND id_c = :id_c 
+            AND (nom LIKE :search OR prenom LIKE :search OR email LIKE :search)";
+    $stmt = $this->conn->prepare($sql);
+    $like = '%' . $search . '%';
+    $stmt->bindParam(':id_c', $id_c, PDO::PARAM_INT);
+    $stmt->bindParam(':search', $like, PDO::PARAM_STR);
+    $stmt->execute();
+    return (int)$stmt->fetchColumn();
+}
+
 
 
 
